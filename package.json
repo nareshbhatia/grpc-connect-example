@@ -1,5 +1,5 @@
 {
-  "name": "connect-example",
+  "name": "grpc-connect-example",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "codegen": "buf generate buf.build/connectrpc/eliza"
   },
   "dependencies": {
     "@buf/connectrpc_eliza.bufbuild_es": "^2.2.3-20230913231627-233fca715f49.1",
