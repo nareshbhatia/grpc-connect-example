@@ -1,6 +1,10 @@
 # gRPC Connect Example
 
-Based on [Connect for Web – Getting Started](https://connectrpc.com/docs/web/getting-started)
+Accesses a gRPC endpoint from a browser using the Connect protocol.
+
+- Based on [Connect for Web – Getting Started](https://connectrpc.com/docs/web/getting-started)
+- Transport created using createConnectTransport()
+- Connect protocol doesn't require a proxy to connect to the service as required for the gRPC-web protocol
 
 ![Screenshot](assets/screenshot.png)
 
