@@ -9,6 +9,8 @@ import { ElizaService } from "./gen/connectrpc/eliza/v1/eliza_pb";
 
 // The transport defines what type of endpoint we're hitting.
 // In our example we'll be communicating with a Connect endpoint.
+// If your endpoint only supports gRPC-web, make sure to use
+// `createGrpcWebTransport` instead.
 const transport = createConnectTransport({
   baseUrl: "https://demo.connectrpc.com",
 });
@@ -25,7 +27,34 @@ function App() {
         message: string;
       }[]
       >([]);
-  return <>
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Clear inputValue since the user has submitted.
+    setInputValue("");
+    // Store the inputValue in the chain of messages and
+    // mark this message as coming from "me"
+    setMessages((prev) => [
+      ...prev,
+      {
+        fromMe: true,
+        message: inputValue,
+      },
+    ]);
+    const response = await client.say({
+      sentence: inputValue,
+    });
+    setMessages((prev) => [
+      ...prev,
+      {
+        fromMe: false,
+        message: response.sentence,
+      },
+    ]);
+  };
+
+  return (
+  <>
     <ol>
       {messages.map((msg, index) => (
           <li key={index}>
@@ -33,34 +62,11 @@ function App() {
           </li>
       ))}
     </ol>
-    <form onSubmit={async (e) => {
-      e.preventDefault();
-      // Clear inputValue since the user has submitted.
-      setInputValue("");
-      // Store the inputValue in the chain of messages and
-      // mark this message as coming from "me"
-      setMessages((prev) => [
-        ...prev,
-        {
-          fromMe: true,
-          message: inputValue,
-        },
-      ]);
-      const response = await client.say({
-        sentence: inputValue,
-      });
-      setMessages((prev) => [
-        ...prev,
-        {
-          fromMe: false,
-          message: response.sentence,
-        },
-      ]);
-    }}>
+    <form onSubmit={handleSubmit}>
       <input value={inputValue} onChange={e => setInputValue(e.target.value)} />
       <button type="submit">Send</button>
     </form>
-  </>;
+  </>);
 }
 
 export default App
